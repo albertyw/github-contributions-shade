@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Contributions Shade",
+  "version": "1.0.0",
+
+  "description": "Re-shade the GitHub contribution calendar using fixed thresholds so one outlier day cannot flatten the year.",
+
+  "author": "Albert Wang",
+  "homepage_url": "https://github.com/albertyw/github-contributions-shade",
+  "offline_enabled": true,
+
+  "content_scripts": [{
+    "matches": [
+      "https://github.com/albertyw",
+      "https://github.com/albertyw?*",
+      "https://github.com/albertyw/*"
+    ],
+    "js": ["github-contributions-shade.min.js"],
+    "run_at": "document_idle"
+  }]
+}
