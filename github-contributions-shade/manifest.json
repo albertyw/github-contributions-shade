@@ -7,7 +7,6 @@
 
   "author": "Albert Wang",
   "homepage_url": "https://github.com/albertyw/github-contributions-shade",
-  "offline_enabled": true,
 
   "content_scripts": [{
     "matches": [

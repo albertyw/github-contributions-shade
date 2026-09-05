@@ -5,10 +5,13 @@
   "description": "Chrome extension that re-buckets the GitHub contribution calendar shades using fixed thresholds",
   "type": "module",
   "scripts": {
+    "build": "webpack && cp dist/main.js github-contributions-shade/github-contributions-shade.min.js && rm -r dist",
+    "clean": "rm -f github-contributions-shade/github-contributions-shade.min.js && rm -f github-contributions-shade.zip",
+    "package": "pnpm run clean && pnpm run build && zip -r github-contributions-shade.zip github-contributions-shade",
     "eslint": "eslint .",
     "tsc": "tsc --noEmit",
     "wdio": "wdio run ./wdio.conf.js && test -s .coverage/clover.xml",
-    "test": "pnpm run eslint && pnpm run tsc && pnpm run wdio"
+    "test": "pnpm run build && pnpm run eslint && pnpm run tsc && pnpm run wdio"
   },
   "repository": {
     "type": "git",

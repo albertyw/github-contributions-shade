@@ -27,8 +27,11 @@ function schedule(): void {
 sweep();
 
 /*
- * childList only, never attributes: applyLevels writes data-level and aria-describedby,
- * so observing attributes would make the observer retrigger on its own writes.
+ * childList only. applyLevels writes data-level and aria-describedby, so observing
+ * attributes would wake the observer on its own writes; that would settle after one
+ * redundant no-op sweep rather than loop, since applyLevels skips cells already at the
+ * right level, but the sweep is pure waste. Everything that matters here - year tabs
+ * replacing the calendar, tool-tips appended after the table - is a childList change.
  */
 new MutationObserver(schedule).observe(document.documentElement, {
   childList: true,
