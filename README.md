@@ -6,8 +6,8 @@
 ![Before and after](img/before-after.png)
 
 [![Build Status](https://drone.albertyw.com/api/badges/albertyw/github-contributions-shade/status.svg)](https://drone.albertyw.com/albertyw/github-contributions-shade)
-[![Maintainability](https://qlty.sh/gh/albertyw/projects/github-contributions-shade/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
-[![Code Coverage](https://qlty.sh/gh/albertyw/projects/github-contributions-shade/coverage.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
+[![Maintainability](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
+[![Code Coverage](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/coverage.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
 
 A Chrome extension that re-shades the GitHub contribution calendar using fixed
 thresholds, so a single unusual day cannot flatten the rest of the year.
