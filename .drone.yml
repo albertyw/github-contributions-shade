@@ -1,0 +1,18 @@
+kind: pipeline
+type: docker
+name: test
+
+steps:
+  - name: Test Node
+    image: satantime/puppeteer-node:26-trixie-slim
+    commands:
+      - apt-get update && apt-get install -y curl xz-utils
+      - curl https://qlty.sh | sh
+      - curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+      - export PNPM_HOME="$HOME/.local/share/pnpm" && export PATH="$PNPM_HOME/bin:$PATH"
+      - pnpm install
+      - pnpm test
+      - ~/.qlty/bin/qlty coverage publish .coverage/clover.xml --override-commit-sha "$DRONE_COMMIT_SHA" --override-branch "$DRONE_BRANCH" --override-build-id "$DRONE_BUILD_NUMBER"
+    environment:
+      QLTY_COVERAGE_TOKEN:
+        from_secret: qlty_coverage_token
