@@ -7,7 +7,7 @@
   "scripts": {
     "eslint": "eslint .",
     "tsc": "tsc --noEmit",
-    "wdio": "wdio run ./wdio.conf.js",
+    "wdio": "wdio run ./wdio.conf.js && test -s .coverage/clover.xml",
     "test": "pnpm run eslint && pnpm run tsc && pnpm run wdio"
   },
   "repository": {

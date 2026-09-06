@@ -9,11 +9,15 @@ import { existsSync } from "node:fs";
  * The snap entry is the real executable rather than /snap/bin/chromium, which is a
  * launcher wrapper that chromedriver cannot drive.
  */
-function firstExisting(candidates) {
+function firstExisting(name, candidates) {
+  const [configured] = candidates;
+  if (configured && !existsSync(configured)) {
+    throw new Error(`${name} is set to ${configured}, which does not exist`);
+  }
   return candidates.find((candidate) => candidate && existsSync(candidate));
 }
 
-const chromeBinary = firstExisting([
+const chromeBinary = firstExisting("CHROME_BINARY", [
   process.env.CHROME_BINARY,
   "/snap/chromium/current/usr/lib/chromium-browser/chrome",
   "/usr/bin/chromium",
@@ -22,7 +26,7 @@ const chromeBinary = firstExisting([
   "/usr/bin/google-chrome-stable",
 ]);
 
-const chromedriverBinary = firstExisting([
+const chromedriverBinary = firstExisting("CHROMEDRIVER_BINARY", [
   process.env.CHROMEDRIVER_BINARY,
   "/snap/bin/chromium.chromedriver",
   "/usr/bin/chromedriver",
@@ -34,6 +38,14 @@ export const config = {
     coverage: {
       enabled: true,
       reportsDirectory: ".coverage",
+      // shade.ts is pure logic with no excuse for untested paths. Branches sit below
+      // 100 because two null guards in tooltipTexts are unreachable: the
+      // `tool-tip[for^=...]` selector guarantees the attribute, and Element.textContent
+      // is never null, but the DOM types require both checks.
+      statements: 100,
+      lines: 100,
+      functions: 100,
+      branches: 90,
     },
   }],
 
@@ -63,7 +75,7 @@ export const config = {
     },
   ],
 
-  logLevel: "warn",
+  logLevel: process.env.WDIO_LOG_LEVEL || "warn",
   bail: 0,
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
