@@ -1,9 +1,12 @@
 # GitHub Contributions Shade
 
-> The before/after screenshot is pending; it will be added once the extension has been
-> loaded locally and captured.
+Before:
 
-![Before and after](img/before-after.png)
+![Before](img/before.png)
+
+After:
+
+![After](img/after.png)
 
 [![Build Status](https://drone.albertyw.com/api/badges/albertyw/github-contributions-shade/status.svg)](https://drone.albertyw.com/albertyw/github-contributions-shade)
 [![Maintainability](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
