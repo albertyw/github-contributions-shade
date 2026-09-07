@@ -2,32 +2,37 @@ import { existsSync } from "node:fs";
 
 /**
  * WebdriverIO downloads a Chrome for Testing build and a matching chromedriver by
- * default, but Google publishes those only for linux-x86_64; on other architectures the
- * download yields a binary that cannot execute. Prefer an installed browser and driver
- * whenever one is present, and fall back to WebdriverIO's own download otherwise.
+ * default. That download is unusable on arm64 Linux, where Google publishes no stable
+ * build and @puppeteer/browsers hands out the x86-64 binary anyway. Prefer a locally
+ * installed browser and driver on every platform, falling back to WebdriverIO's own
+ * download when none is found, so one rule holds regardless of architecture.
+ *
+ * CHROME_BINARY and CHROMEDRIVER_BINARY override the discovery.
  *
  * The snap entry is the real executable rather than /snap/bin/chromium, which is a
  * launcher wrapper that chromedriver cannot drive.
  */
-function firstExisting(name, candidates) {
-  const [configured] = candidates;
-  if (configured && !existsSync(configured)) {
-    throw new Error(`${name} is set to ${configured}, which does not exist`);
+function findBinary(name, configured, candidates) {
+  if (configured) {
+    if (!existsSync(configured)) {
+      throw new Error(`${name} is set to ${configured}, which does not exist`);
+    }
+    return configured;
   }
-  return candidates.find((candidate) => candidate && existsSync(candidate));
+  return candidates.find(existsSync);
 }
 
-const chromeBinary = firstExisting("CHROME_BINARY", [
-  process.env.CHROME_BINARY,
+const chromeBinary = findBinary("CHROME_BINARY", process.env.CHROME_BINARY, [
   "/snap/chromium/current/usr/lib/chromium-browser/chrome",
+  "/usr/lib/chromium/chromium",
+  "/usr/lib/chromium-browser/chrome",
   "/usr/bin/chromium",
   "/usr/bin/chromium-browser",
   "/usr/bin/google-chrome",
   "/usr/bin/google-chrome-stable",
 ]);
 
-const chromedriverBinary = firstExisting("CHROMEDRIVER_BINARY", [
-  process.env.CHROMEDRIVER_BINARY,
+const chromedriverBinary = findBinary("CHROMEDRIVER_BINARY", process.env.CHROMEDRIVER_BINARY, [
   "/snap/bin/chromium.chromedriver",
   "/usr/bin/chromedriver",
   "/usr/lib/chromium/chromedriver",
