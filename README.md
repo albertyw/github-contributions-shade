@@ -1,9 +1,12 @@
 # GitHub Contributions Shade
 
-> The before/after screenshot is pending; it will be added once the extension has been
-> loaded locally and captured.
+Before:
 
-![Before and after](img/before-after.png)
+![Before](img/before.png)
+
+After:
+
+![After](img/after.png)
 
 [![Build Status](https://drone.albertyw.com/api/badges/albertyw/github-contributions-shade/status.svg)](https://drone.albertyw.com/albertyw/github-contributions-shade)
 [![Maintainability](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
@@ -94,7 +97,7 @@ edit `THRESHOLDS` in `src/shade.ts`, run `pnpm run build`, and reload the extens
 
 The extension requests no permissions, makes no network requests, and stores nothing.
 It runs only on `github.com/albertyw`, and it only reads and writes the calendar's DOM
-on the page you are already looking at.  The manifest is 21 lines and the two source
+on the page you are already looking at.  The manifest is 27 lines and the two source
 files are about 140 lines including comments; both are worth reading before installing
 anything that touches your browser.
 
@@ -107,10 +110,13 @@ anything that touches your browser.
     DOM subtree.  Pure DOM manipulation with no extension APIs, which is what makes it
     testable outside an extension host.
   - `content.ts` — the content script: sweeps on load and installs the observer.
+  - `icon.png` — the icon as originally drawn, kept as the design reference.
 - `github-contributions-shade/` — the extension itself, and the directory that gets
   zipped.
   - `manifest.json` — Manifest V3 declaration.
   - `github-contributions-shade.min.js` — webpack output, not checked in.
+  - `icons/` — `icon16.png`, `icon32.png`, `icon48.png` and `icon128.png`, the four
+    sizes Chrome asks for.
 - `test/` — WebdriverIO browser tests run with Mocha.
 - `webpack.config.js` — bundles `src/content.ts` into the extension directory.
 
