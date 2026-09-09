@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
 
+import type { Capabilities, Options } from "@wdio/types";
+
 /**
  * WebdriverIO downloads a Chrome for Testing build and a matching chromedriver by
  * default. That download is unusable on arm64 Linux, where Google publishes no stable
@@ -12,7 +14,11 @@ import { existsSync } from "node:fs";
  * The snap entry is the real executable rather than /snap/bin/chromium, which is a
  * launcher wrapper that chromedriver cannot drive.
  */
-function findBinary(name, configured, candidates) {
+function findBinary(
+  name: string,
+  configured: string | undefined,
+  candidates: string[],
+): string | undefined {
   if (configured) {
     if (!existsSync(configured)) {
       throw new Error(`${name} is set to ${configured}, which does not exist`);
@@ -38,7 +44,11 @@ const chromedriverBinary = findBinary("CHROMEDRIVER_BINARY", process.env.CHROMED
   "/usr/lib/chromium/chromedriver",
 ]);
 
-export const config = {
+// Options.Testrunner omits `capabilities`, which wdio declares separately, so
+// the config type is the intersection of the two.
+export const config: Options.Testrunner & {
+  capabilities: Capabilities.RequestedStandaloneCapabilities[];
+} = {
   runner: ["browser", {
     coverage: {
       enabled: true,
@@ -80,7 +90,7 @@ export const config = {
     },
   ],
 
-  logLevel: process.env.WDIO_LOG_LEVEL || "warn",
+  logLevel: (process.env.WDIO_LOG_LEVEL as Options.Testrunner["logLevel"]) || "warn",
   bail: 0,
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
@@ -90,8 +100,8 @@ export const config = {
   // package sets manually. Node 26 bundles undici v8, which enforces the Fetch
   // spec and rejects these forbidden request headers with UND_ERR_INVALID_ARG,
   // breaking session creation. See https://github.com/webdriverio/webdriverio/issues/15265
-  transformRequest: (requestOptions) => {
-    const headers = requestOptions.headers;
+  transformRequest: (requestOptions: RequestInit): RequestInit => {
+    const headers = requestOptions.headers as Headers | undefined;
     headers?.delete("content-length");
     headers?.delete("connection");
     return requestOptions;
