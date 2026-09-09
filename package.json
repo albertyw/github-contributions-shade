@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/albertyw/github-contributions-shade#readme",
   "engines": {
-    "node": ">=18"
+    "node": ">=22.18"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
