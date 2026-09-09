@@ -1,6 +1,8 @@
 import path from "path";
 
-const config = {
+import type { Configuration } from "webpack";
+
+const config: Configuration = {
   entry: "./src/content.ts",
   mode: "production",
   target: "web",
