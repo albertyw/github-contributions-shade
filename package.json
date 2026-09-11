@@ -10,7 +10,7 @@
     "package": "pnpm run clean && pnpm run build && zip -r github-contributions-shade.zip github-contributions-shade",
     "eslint": "eslint .",
     "tsc": "tsc --noEmit",
-    "wdio": "wdio run ./wdio.conf.js && test -s .coverage/clover.xml",
+    "wdio": "wdio run ./wdio.conf.ts && test -s .coverage/clover.xml",
     "test": "pnpm run build && pnpm run eslint && pnpm run tsc && pnpm run wdio"
   },
   "repository": {
@@ -24,15 +24,17 @@
   },
   "homepage": "https://github.com/albertyw/github-contributions-shade#readme",
   "engines": {
-    "node": ">=18"
+    "node": ">=22.18"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/mocha": "^10.0.10",
+    "@types/node": "^26.5.0",
     "@wdio/browser-runner": "^9.31.5",
     "@wdio/cli": "^9.31.5",
     "@wdio/mocha-framework": "^9.31.5",
     "@wdio/spec-reporter": "^9.31.2",
+    "@wdio/types": "^9.31.2",
     "eslint": "^10.9.1",
     "globals": "^17.12.0",
     "ts-loader": "^9.6.2",

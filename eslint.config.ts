@@ -10,7 +10,7 @@ export default tseslint.config(
   tseslint.configs.recommended,
   {
     // Config files run in Node; sources and tests run in the browser.
-    files: ["*.js"],
+    files: ["*.ts"],
     languageOptions: {
       globals: globals.node,
     },
