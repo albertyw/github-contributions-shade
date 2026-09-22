@@ -97,9 +97,9 @@ edit `THRESHOLDS` in `src/shade.ts`, run `pnpm run build`, and reload the extens
 
 The extension requests no permissions, makes no network requests, and stores nothing.
 It runs only on `github.com/albertyw`, and it only reads and writes the calendar's DOM
-on the page you are already looking at.  The manifest is 27 lines and the two source
-files are about 140 lines including comments; both are worth reading before installing
-anything that touches your browser.
+on the page you are already looking at.  The manifest and the two source files, about
+140 lines including comments, are worth reading before installing anything that touches
+your browser.
 
 ## Development
 
@@ -118,7 +118,7 @@ anything that touches your browser.
   - `icons/` — `icon16.png`, `icon32.png`, `icon48.png` and `icon128.png`, the four
     sizes Chrome asks for.
 - `test/` — WebdriverIO browser tests run with Mocha.
-- `webpack.config.js` — bundles `src/content.ts` into the extension directory.
+- `webpack.config.ts` — bundles `src/content.ts` into the extension directory.
 
 ### Setup
 
@@ -126,7 +126,7 @@ anything that touches your browser.
 pnpm install
 ```
 
-Node >=18 is required (see `engines` in `package.json`).
+Node >=22.18 is required (see `engines` in `package.json`).
 
 ### Common commands
 
@@ -146,7 +146,7 @@ The test suite runs in Chrome.
 
 WebdriverIO would otherwise download its own Chrome for Testing build and a matching
 chromedriver, and Google publishes those only for `linux-x86_64` — on arm64 the download
-produces a binary that cannot execute.  So `wdio.conf.js` looks for an already installed
+produces a binary that cannot execute.  So `wdio.conf.ts` looks for an already installed
 Chrome or Chromium first, checking the usual locations including snap's.  Nothing needs
 configuring on a machine that has a browser installed.
 
@@ -157,7 +157,7 @@ lives at `/snap/chromium/current/usr/lib/chromium-browser/chrome`.
 
 ### Loading the extension locally
 
-The extension is not published anywhere.  Install it from a local build.
+To try a development build, install it unpacked.
 
 1. `pnpm run build`
 2. Open `chrome://extensions` and enable **Developer mode**
@@ -172,15 +172,13 @@ pnpm test
 
 ## Releasing a New Version
 
-There is no upload step: this extension is not distributed to the Chrome Web Store or
-to npm.  A release is only a marker in this repository's history.
+The extension is distributed through the Chrome Web Store.
 
 1. Update `CHANGELOG.md`
 2. Bump the version in `package.json` and `github-contributions-shade/manifest.json`
 3. Commit and tag the release
-
-`pnpm run package` produces `github-contributions-shade.zip` on demand if you want to
-hand someone a build, but that zip is a build artifact rather than a release.
+4. `pnpm run package` to produce `github-contributions-shade.zip`
+5. Upload the zip in the Chrome Web Store developer dashboard
 
 ## License
 
