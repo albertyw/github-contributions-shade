@@ -12,36 +12,57 @@ After:
 [![Maintainability](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
 [![Code Coverage](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/coverage.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
 
-A Chrome extension that re-shades the GitHub contribution calendar using fixed
-thresholds, so a single unusual day cannot flatten the rest of the year.
+<!--
+Chrome Web Store description: everything between the BEGIN and END markers is pasted
+verbatim into the developer dashboard, so keep it plain text (no Markdown syntax
+beyond "- " lists and bare URLs), one line per paragraph, and under 16,000 characters.
+-->
+<!-- BEGIN STORE DESCRIPTION -->
+GitHub Contributions Shade re-shades the contribution calendar on GitHub profile pages using fixed thresholds, so a single unusual day cannot wash out the rest of the year.
 
-## About
+WHY
 
-GitHub paints each day of the contribution calendar in one of five shades, and it
-derives the cutoffs between those shades from the largest single day in the window.
-That makes the whole calendar hostage to one number: a single outlier day rescales
-every other day on the graph.
+GitHub paints each day of the contribution calendar in one of five shades, and it derives the cutoffs between those shades from the busiest single day in the window. That makes the whole calendar hostage to one number: a single outlier day rescales every other day on the graph.
 
-That is exactly what happened here.  On 2026-07-26 this account recorded 31
-contributions — an accident, far above any other day.  It set the maximum, which pushed
-the top cutoff to roughly 24, and the darkest shade ended up describing essentially that
-one day.  Measured on 2026-09-04 across the trailing 371 days:
+That is exactly what happened on the profile this extension was built for. One accidental day of 31 contributions, far above any other, pushed GitHub's top cutoff to roughly 24. Across the trailing 371 days, only 5 days reached the darkest shade while 160 sat at the lightest, even though the underlying activity was steady: just one day with no contributions, and the middle half of active days fell between 4 and 17 contributions. The data was fine; the cutoffs were wrong for it.
 
-| Shade   | Days |                                    |
-| ------- | ---- | ---------------------------------- |
-| level 0 |    2 |                                    |
-| level 1 |  160 |                                    |
-| level 2 |   99 |                                    |
-| level 3 |  110 |                                    |
-| level 4 |    5 | ← the outlier, and almost nothing else |
+This extension replaces GitHub's cutoffs with constants, so no single day can rescale the others. With them, the same year spreads across the five shades as 1, 143, 83, 72 and 72 days.
 
-Five days out of 371 reached the darkest shade while 160 sat at the lightest.  The
-underlying distribution is perfectly healthy — only one zero day, and nonzero quartiles
-at 4, 9 and 17 — so it is not the data that is flat, only the cutoffs that are wrong
-for it.
+THRESHOLDS
 
-This extension replaces those cutoffs with fixed thresholds.  Because they are
-constants, no single day can rescale the others.
+- Empty: no contributions
+- Shade 1 (lightest): 1 to 6 contributions
+- Shade 2: 7 to 12 contributions
+- Shade 3: 13 to 18 contributions
+- Shade 4 (darkest): 19 or more contributions
+
+HOW IT WORKS
+
+- It reads each day's contribution count from the tooltip GitHub already renders, works out which shade that count belongs to, and sets that shade on the day's square.
+- It does not override any colors. GitHub's own styles paint the square, so the light, dark, dimmed and colorblind themes all keep working exactly as before.
+- The screen-reader description of each day is updated along with its shade, so the two stay consistent.
+- Switching between year tabs on the profile is handled automatically.
+- There is nothing to configure: no options page, no toolbar button, no settings.
+
+WHERE IT RUNS
+
+The extension currently runs only on the GitHub profile at https://github.com/albertyw and pages under it. It does nothing on any other website or on any other GitHub profile.
+
+PRIVACY
+
+- No data is collected, stored, transmitted, sold or shared.
+- No network requests, no analytics, no cookies, no storage.
+- No extension permissions beyond running on the pages listed above.
+- Everything happens inside the page you are already viewing, and the counts it reads are discarded when you leave.
+
+Privacy policy: https://github.com/albertyw/github-contributions-shade/blob/master/PRIVACY.md
+
+OPEN SOURCE
+
+The extension is open source under the MIT license. The source code is about 140 lines of TypeScript and is worth reading before installing anything that touches your browser: https://github.com/albertyw/github-contributions-shade
+
+Bug reports and questions: https://github.com/albertyw/github-contributions-shade/issues
+<!-- END STORE DESCRIPTION -->
 
 ## How it works
 
@@ -80,26 +101,11 @@ year tabs swaps the calendar over AJAX, and the tooltips are appended after the 
 renders.  It watches `childList` only, never attributes, so the extension's own writes
 cannot retrigger it.
 
-## Thresholds
+## Changing the thresholds
 
-| Level | Contributions | Days, with this extension |
-| ----- | ------------- | ------------------------- |
-| 0     | 0             | 1                         |
-| 1     | 1–6           | 143                       |
-| 2     | 7–12          | 83                        |
-| 3     | 13–18         | 72                        |
-| 4     | 19+           | 72                        |
-
-The thresholds are constants, not settings — there is no options page.  To change them,
-edit `THRESHOLDS` in `src/shade.ts`, run `pnpm run build`, and reload the extension.
-
-## Privacy
-
-The extension requests no permissions, makes no network requests, and stores nothing.
-It runs only on `github.com/albertyw`, and it only reads and writes the calendar's DOM
-on the page you are already looking at.  The manifest and the two source files, about
-140 lines including comments, are worth reading before installing anything that touches
-your browser.
+The thresholds are constants, not settings.  To change them, edit `THRESHOLDS` in
+`src/shade.ts`, run `pnpm run build`, and reload the extension.  The profiles it runs
+on are the content-script `matches` in `github-contributions-shade/manifest.json`.
 
 ## Development
 
