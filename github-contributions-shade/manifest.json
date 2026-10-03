@@ -3,7 +3,7 @@
   "name": "GitHub Contributions Shade",
   "version": "1.0.0",
 
-  "description": "Re-shade the GitHub contribution calendar using fixed thresholds so one outlier day cannot flatten the year.",
+  "description": "Re-shade the GitHub contribution calendar using your own per-profile thresholds so one outlier day cannot flatten the year.",
 
   "author": "Albert Wang",
   "homepage_url": "https://github.com/albertyw/github-contributions-shade",
@@ -16,12 +16,15 @@
   },
 
   "content_scripts": [{
-    "matches": [
-      "https://github.com/albertyw",
-      "https://github.com/albertyw?*",
-      "https://github.com/albertyw/*"
-    ],
+    "matches": ["https://github.com/*"],
     "js": ["github-contributions-shade.min.js"],
     "run_at": "document_idle"
-  }]
+  }],
+
+  "permissions": ["storage"],
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
 }

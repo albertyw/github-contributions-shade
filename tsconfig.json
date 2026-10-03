@@ -13,7 +13,7 @@
     "exactOptionalPropertyTypes": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "types": ["mocha", "node", "@wdio/globals/types"],
+    "types": ["chrome", "mocha", "node", "@wdio/globals/types"],
     "skipLibCheck": true,
     "noEmit": true
   },

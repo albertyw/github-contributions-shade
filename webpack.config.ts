@@ -3,12 +3,15 @@ import path from "path";
 import type { Configuration } from "webpack";
 
 const config: Configuration = {
-  entry: "./src/content.ts",
+  entry: {
+    "github-contributions-shade": "./src/content.ts",
+    options: "./src/options-page.ts",
+  },
   mode: "production",
   target: "web",
   output: {
     path: path.resolve("dist"),
-    filename: "main.js",
+    filename: "[name].min.js",
   },
   resolve: {
     extensions: [".ts", ".js"],

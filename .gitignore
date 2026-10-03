@@ -146,7 +146,7 @@ vite.config.ts.timestamp-*
 .coverage
 
 # Extension build artifacts
-github-contributions-shade/github-contributions-shade.min.js
+github-contributions-shade/*.min.js
 github-contributions-shade.zip
 *.crx
 dist
