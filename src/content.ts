@@ -6,13 +6,13 @@
  * tool-tip elements carrying the counts are appended after the table itself renders.
  */
 
-import { applyLevels } from "./shade.js";
+import { DEFAULT_THRESHOLDS, applyLevels } from "./shade.js";
 
 let scheduled: number | null = null;
 
 function sweep(): void {
   scheduled = null;
-  applyLevels(document);
+  applyLevels(document, DEFAULT_THRESHOLDS);
 }
 
 /**

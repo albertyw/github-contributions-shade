@@ -1,7 +1,7 @@
 import { expect } from "@wdio/globals";
 
 import {
-  THRESHOLDS,
+  DEFAULT_THRESHOLDS,
   applyLevels,
   levelFor,
   parseCount,
@@ -53,9 +53,9 @@ function legend(root: HTMLElement): HTMLElement {
   return root;
 }
 
-describe("THRESHOLDS", function() {
+describe("DEFAULT_THRESHOLDS", function() {
   it("is the confirmed set of cutoffs", function() {
-    expect(THRESHOLDS).toEqual([1, 7, 13, 19]);
+    expect(DEFAULT_THRESHOLDS).toEqual([1, 7, 13, 19]);
   });
 });
 
@@ -133,7 +133,7 @@ describe("applyLevels", function() {
       { id: "contribution-day-component-0-1", level: "1", tooltip: "8 contributions on September 1st." },
       { id: "contribution-day-component-0-2", level: "0", tooltip: "No contributions on September 2nd." },
     ]);
-    expect(applyLevels(root)).toBe(2);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(2);
 
     const cells = root.querySelectorAll("td.ContributionCalendar-day");
     expect(cells[0]?.getAttribute("data-level")).toBe("4");
@@ -147,15 +147,15 @@ describe("applyLevels", function() {
     const root = calendar([
       { id: "contribution-day-component-0-0", level: "3", tooltip: "20 contributions on August 31st." },
     ]);
-    expect(applyLevels(root)).toBe(1);
-    expect(applyLevels(root)).toBe(0);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(1);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(0);
   });
 
   it("leaves a day without a tooltip alone", function() {
     const root = calendar([
       { id: "contribution-day-component-0-0", level: "2" },
     ]);
-    expect(applyLevels(root)).toBe(0);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(0);
     expect(root.querySelector("td")?.getAttribute("data-level")).toBe("2");
   });
 
@@ -163,7 +163,7 @@ describe("applyLevels", function() {
     const root = calendar([
       { id: "contribution-day-component-0-0", level: "2", tooltip: "Something else entirely." },
     ]);
-    expect(applyLevels(root)).toBe(0);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(0);
     expect(root.querySelector("td")?.getAttribute("data-level")).toBe("2");
   });
 
@@ -171,7 +171,7 @@ describe("applyLevels", function() {
     const root = legend(calendar([
       { id: "contribution-day-component-0-0", level: "3", tooltip: "20 contributions on August 31st." },
     ]));
-    applyLevels(root);
+    applyLevels(root, DEFAULT_THRESHOLDS);
     const swatchLevels = [...root.querySelectorAll("div.ContributionCalendar-day")]
       .map((swatch) => swatch.getAttribute("data-level"));
     expect(swatchLevels).toEqual(["0", "1", "2", "3", "4"]);
@@ -191,7 +191,7 @@ describe("applyLevels", function() {
     tip.textContent = "20 contributions on August 31st.";
     root.appendChild(tip);
 
-    expect(applyLevels(root)).toBe(0);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(0);
     expect(impostor.getAttribute("data-level")).toBe("0");
   });
 
@@ -201,5 +201,72 @@ describe("applyLevels", function() {
     ]);
     expect(applyLevels(root, [1, 5, 10, 20])).toBe(1);
     expect(root.querySelector("td")?.getAttribute("data-level")).toBe("2");
+  });
+
+  it("records GitHub's level the first time a cell changes", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "1", tooltip: "20 contributions on August 31st." },
+    ]);
+    const cell = root.querySelector("td");
+    applyLevels(root, DEFAULT_THRESHOLDS);
+    expect(cell?.getAttribute("data-shade-original-level")).toBe("1");
+    applyLevels(root, [1, 50, 100, 200]);
+    expect(cell?.getAttribute("data-level")).toBe("1");
+    expect(cell?.getAttribute("data-shade-original-level")).toBe("1");
+    applyLevels(root, [1, 2, 3, 4]);
+    expect(cell?.getAttribute("data-shade-original-level")).toBe("1");
+  });
+
+  it("does not record anything for a cell already at the right level", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "4", tooltip: "20 contributions on August 31st." },
+    ]);
+    applyLevels(root, DEFAULT_THRESHOLDS);
+    expect(root.querySelector("td")?.hasAttribute("data-shade-original-level")).toBe(false);
+  });
+  it("has nothing to record for a cell without a level", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "0", tooltip: "20 contributions on August 31st." },
+    ]);
+    const cell = root.querySelector("td");
+    cell?.removeAttribute("data-level");
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(1);
+    expect(cell?.getAttribute("data-level")).toBe("4");
+    expect(cell?.hasAttribute("data-shade-original-level")).toBe(false);
+  });
+});
+
+describe("applyLevels with null thresholds", function() {
+  it("restores GitHub's level and removes the marker", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "1", tooltip: "20 contributions on August 31st." },
+    ]);
+    const cell = root.querySelector("td");
+    applyLevels(root, DEFAULT_THRESHOLDS);
+    expect(applyLevels(root, null)).toBe(1);
+    expect(cell?.getAttribute("data-level")).toBe("1");
+    expect(cell?.getAttribute("aria-describedby")).toBe("contribution-graph-legend-level-1");
+    expect(cell?.hasAttribute("data-shade-original-level")).toBe(false);
+  });
+
+  it("leaves unmarked cells alone", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "3", tooltip: "20 contributions on August 31st." },
+    ]);
+    expect(applyLevels(root, null)).toBe(0);
+    expect(root.querySelector("td")?.getAttribute("data-level")).toBe("3");
+  });
+
+  it("round-trips through thresholds, null, and thresholds again", function() {
+    const root = calendar([
+      { id: "contribution-day-component-0-0", level: "1", tooltip: "20 contributions on August 31st." },
+    ]);
+    const cell = root.querySelector("td");
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(1);
+    expect(applyLevels(root, null)).toBe(1);
+    expect(applyLevels(root, null)).toBe(0);
+    expect(applyLevels(root, DEFAULT_THRESHOLDS)).toBe(1);
+    expect(cell?.getAttribute("data-level")).toBe("4");
+    expect(cell?.getAttribute("data-shade-original-level")).toBe("1");
   });
 });
