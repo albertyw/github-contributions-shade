@@ -2,11 +2,11 @@
   "name": "github-contributions-shade",
   "version": "1.0.0",
   "private": true,
-  "description": "Chrome extension that re-buckets the GitHub contribution calendar shades using fixed thresholds",
+  "description": "Chrome extension that re-buckets the GitHub contribution calendar shades using per-profile thresholds",
   "type": "module",
   "scripts": {
-    "build": "webpack && cp dist/main.js github-contributions-shade/github-contributions-shade.min.js && rm -r dist",
-    "clean": "rm -f github-contributions-shade/github-contributions-shade.min.js && rm -f github-contributions-shade.zip",
+    "build": "webpack && cp dist/*.min.js github-contributions-shade/ && rm -r dist",
+    "clean": "rm -f github-contributions-shade/*.min.js && rm -f github-contributions-shade.zip",
     "package": "pnpm run clean && pnpm run build && zip -r github-contributions-shade.zip github-contributions-shade",
     "eslint": "eslint .",
     "tsc": "tsc --noEmit",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/chrome": "^0.3.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.5.0",
     "@wdio/browser-runner": "^9.31.5",

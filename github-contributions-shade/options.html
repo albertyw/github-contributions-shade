@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Contributions Shade</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    table { border-collapse: collapse; margin: 1rem 0; }
+    th, td { padding: 0.25rem 0.5rem; text-align: left; }
+    input.login { width: 12rem; }
+    input.threshold { width: 5rem; }
+    .ranges { color: GrayText; white-space: nowrap; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    [aria-invalid="true"] { outline: 2px solid #d1242f; }
+    #status { white-space: pre-line; }
+  </style>
+</head>
+<body>
+  <h1>GitHub Contributions Shade</h1>
+  <p>
+    List the GitHub profiles whose contribution calendar you want re-shaded.  Profiles
+    you don't list keep GitHub's own shading, so nothing changes until you add a
+    username and save.  Saved changes show up right away in GitHub tabs opened since
+    the extension was installed or last updated; reload any older tabs.
+  </p>
+  <ul>
+    <li><strong>Username</strong> is the part after <code>github.com/</code>.</li>
+    <li>
+      Each <strong>… from</strong> column is the fewest contributions in a day that get
+      that shade of green.  Days below <strong>Lightest from</strong> stay empty.  The
+      last column shows the range each shade ends up covering.
+    </li>
+    <li>
+      <strong>Choosing numbers:</strong> hover over a few busy days on the calendar to
+      see their counts.  Set Darkest around a typical busy day rather than your single
+      busiest, and space the others evenly below it.
+    </li>
+  </ul>
+  <form id="settings">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Lightest from</th>
+          <th>Medium-light from</th>
+          <th>Medium-dark from</th>
+          <th>Darkest from</th>
+          <th>Contributions per shade</th>
+          <th><span class="visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody id="users"></tbody>
+    </table>
+    <p>
+      <button type="button" id="add">Add user</button>
+      <button type="submit" id="save">Save</button>
+    </p>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+  <script src="options.min.js"></script>
+</body>
+</html>
