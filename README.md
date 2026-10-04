@@ -224,7 +224,7 @@ The extension is distributed through the Chrome Web Store.
 2. Bump the version in `package.json` and `github-contributions-shade/manifest.json`
 3. Commit and tag the release
 4. `pnpm run package` to produce `github-contributions-shade.zip`
-5. Upload the zip in the Chrome Web Store developer dashboard
+5. Upload the zip in the [Chrome Web Store developer dashboard](https://chrome.google.com/webstore/devconsole/)
 
 ## License
 
