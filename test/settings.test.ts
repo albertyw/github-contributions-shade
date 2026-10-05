@@ -30,6 +30,8 @@ describe("validLogin", function() {
     expect(validLogin("albertyw")).toBe(true);
     expect(validLogin(" AlbertYW ")).toBe(true);
     expect(validLogin("a-b-c")).toBe(true);
+    expect(validLogin("octocat_acme")).toBe(true);
+    expect(validLogin("a-b_c")).toBe(true);
     expect(validLogin("@octocat")).toBe(true);
     expect(validLogin("a".repeat(39))).toBe(true);
   });
@@ -39,7 +41,11 @@ describe("validLogin", function() {
     expect(validLogin("-albert")).toBe(false);
     expect(validLogin("albert-")).toBe(false);
     expect(validLogin("al--bert")).toBe(false);
-    expect(validLogin("al_bert")).toBe(false);
+    expect(validLogin("_albert")).toBe(false);
+    expect(validLogin("albert_")).toBe(false);
+    expect(validLogin("al__bert")).toBe(false);
+    expect(validLogin("al_-bert")).toBe(false);
+    expect(validLogin("al-_bert")).toBe(false);
     expect(validLogin("a".repeat(40))).toBe(false);
   });
 });
@@ -92,6 +98,7 @@ describe("profileLogin", function() {
   it("reads the normalized login from a profile path", function() {
     expect(profileLogin("/AlbertYW")).toBe("albertyw");
     expect(profileLogin("/albertyw/")).toBe("albertyw");
+    expect(profileLogin("/Octocat_ACME")).toBe("octocat_acme");
   });
   it("reads the first segment of a deeper path", function() {
     expect(profileLogin("/albertyw/repo")).toBe("albertyw");

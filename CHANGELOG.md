@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Unreleased
+----------
+
+ - Accept Enterprise Managed User usernames, which contain an underscore
+
+
 v1.1.0 (2026-10-03)
 -------------------
 

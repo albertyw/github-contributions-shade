@@ -179,7 +179,7 @@ export function readRows(tbody: HTMLTableSectionElement): ReadResult {
       continue;
     }
     if (!validLogin(raw)) {
-      errors.push(`"${raw}" is not a valid GitHub username (letters, numbers and single hyphens, up to 39 characters).`);
+      errors.push(`"${raw}" is not a valid GitHub username (letters, numbers, and single hyphens or underscores, up to 39 characters).`);
       invalid.push(loginInput);
       continue;
     }

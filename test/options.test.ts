@@ -248,7 +248,7 @@ describe("readRows", function() {
     const row = addRow(body, "-bad-");
     const result = readRows(body);
     expect(result.errors).toEqual([
-      "\"-bad-\" is not a valid GitHub username (letters, numbers and single hyphens, up to 39 characters).",
+      "\"-bad-\" is not a valid GitHub username (letters, numbers, and single hyphens or underscores, up to 39 characters).",
     ]);
     expect(result.invalid).toEqual([row.querySelector("input.login")]);
   });
@@ -310,7 +310,7 @@ describe("save", function() {
       const status = document.createElement("p");
       const storage = new FakeStorage();
       const bad = addRow(body, "-bad-").querySelector("input.login");
-      const underscore = addRow(body, "al_bert").querySelector("input.login");
+      const underscore = addRow(body, "albert_").querySelector("input.login");
 
       expect(await save(storage, body, status)).toBe(false);
       expect(storage.writes).toEqual([]);

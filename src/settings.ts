@@ -10,8 +10,11 @@ export const STORAGE_KEY = "users";
 
 export type Users = Map<string, Thresholds>;
 
-/** GitHub's rule: 1-39 alphanumerics or single inner hyphens. */
-const LOGIN_PATTERN = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+/**
+ * GitHub's rule: 1-39 alphanumerics or single inner hyphens, plus the underscore that
+ * Enterprise Managed Users get before their shortcode (octocat_acme).
+ */
+const LOGIN_PATTERN = /^[a-z\d](?:[a-z\d]|[-_](?=[a-z\d])){0,38}$/i;
 
 /**
  * GitHub logins are case-insensitive (/AlbertYW serves the same profile as
