@@ -1,10 +1,13 @@
 Change Log
 ==========
 
-Unreleased
-----------
+v1.1.1 (2026-10-08)
+-------------------
 
  - Accept Enterprise Managed User usernames, which contain an underscore
+ - Link to chrome web store
+ - Refresh images and icons
+ - Update dependencies
 
 
 v1.1.0 (2026-10-03)

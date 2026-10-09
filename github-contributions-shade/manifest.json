@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GitHub Contributions Shade",
-  "version": "1.1.0",
+  "version": "1.1.1",
 
   "description": "Re-shade the GitHub contribution calendar using your own per-profile thresholds so one outlier day cannot flatten the year.",
 
