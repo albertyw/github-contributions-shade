@@ -8,6 +8,7 @@ After:
 
 ![After](img/after.png)
 
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/mnaidbkjbcdphmkfhkifiecbpiakepka)](https://chromewebstore.google.com/detail/github-contributions-shad/mnaidbkjbcdphmkfhkifiecbpiakepka)
 [![Build Status](https://drone.albertyw.com/api/badges/albertyw/github-contributions-shade/status.svg)](https://drone.albertyw.com/albertyw/github-contributions-shade)
 [![Maintainability](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/maintainability.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
 [![Code Coverage](https://qlty.sh/badges/3dd6baf2-69fb-477f-a245-f65e6cab9284/coverage.svg)](https://qlty.sh/gh/albertyw/projects/github-contributions-shade)
